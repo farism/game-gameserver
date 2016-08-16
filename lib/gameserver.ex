@@ -6,7 +6,7 @@ defmodule Gameserver do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(ECS.EntityManager, [ECS.EntityManager])
+      worker(EntityManager, [EntityManager])
     ]
 
     opts = [strategy: :one_for_one, name: Gameserver.Supervisor]

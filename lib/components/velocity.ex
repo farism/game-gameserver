@@ -2,7 +2,7 @@ defmodule Velocity do
 
   use Bitwise
 
-  @behaviour Component
+  @behaviour EntityComponent
 
   defstruct [x: 0, y: 0, z: 0]
 

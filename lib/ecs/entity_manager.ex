@@ -1,4 +1,4 @@
-defmodule ECS.EntityManager do
+defmodule EntityManager do
 
   def start_link(name) do
     Agent.start_link(fn -> %{} end, name: name)

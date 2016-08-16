@@ -1,4 +1,4 @@
-defmodule Component do
+defmodule EntityComponent do
 
   @callback get_type :: atom
 

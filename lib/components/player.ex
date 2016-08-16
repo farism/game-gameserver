@@ -2,7 +2,7 @@ defmodule Player do
 
   use Bitwise
 
-  @behaviour Component
+  @behaviour EntityComponent
 
   def get_type do
     :player
