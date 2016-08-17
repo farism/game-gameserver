@@ -9,16 +9,15 @@ defmodule Gameserver do
       worker(EntityManager, [EntityManager])
     ]
 
+    entity = EntityManager.create_entity(1)
+
+    IO.puts(inspect(entity))
+
     opts = [strategy: :one_for_one, name: Gameserver.Supervisor]
     Supervisor.start_link(children, opts)
-
-    # setup
   end
 
-  def setup do
-  end
-
-  def run(agent) do
+  def loop do
   end
 
 end

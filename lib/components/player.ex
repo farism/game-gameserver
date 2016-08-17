@@ -4,12 +4,11 @@ defmodule Player do
 
   @behaviour EntityComponent
 
-  def get_type do
-    :player
-  end
+  @cmp_type :player
+  @cmp_flag 1 <<< 1
 
-  def get_flag do
-    1 <<< 1
-  end
+  def get_type, do: @cmp_type
+
+  def get_flag, do: @cmp_flag
 
 end
