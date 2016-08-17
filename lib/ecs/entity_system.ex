@@ -1,5 +1,5 @@
 defmodule EntitySystem do
 
-  @callback
+  @callback process(list) :: any
 
 end

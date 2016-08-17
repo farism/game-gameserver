@@ -1,9 +1,5 @@
 defmodule EntityManager do
 
-  def start_link(name) do
-    Agent.start_link(fn -> %{ entities: [], components: %{} } end, name: name)
-  end
-
   def create_entity(agent) do
 
   end

@@ -6,12 +6,8 @@ defmodule Gameserver do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(EntityManager, [EntityManager])
+      worker(ECS, [ECS])
     ]
-
-    entity = EntityManager.create_entity(1)
-
-    IO.puts(inspect(entity))
 
     opts = [strategy: :one_for_one, name: Gameserver.Supervisor]
     Supervisor.start_link(children, opts)

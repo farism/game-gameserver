@@ -24,6 +24,7 @@ defmodule Movement do
   end
 
   def process([head|tail]) do
+    IO.puts(inspect(head))
     process(tail)
   end
 
