@@ -7,6 +7,8 @@ defmodule Player do
   @cmp_type :player
   @cmp_flag 1 <<< 1
 
+  defstruct name: ""
+
   def get_type, do: @cmp_type
 
   def get_flag, do: @cmp_flag

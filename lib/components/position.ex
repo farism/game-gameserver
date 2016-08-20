@@ -7,7 +7,7 @@ defmodule Position do
   @cmp_type :position
   @cmp_flag 1 <<< 2
 
-  defstruct [x: 0, y: 0, z: 0]
+  defstruct x: 0, y: 0, z: 0
 
   def get_type, do: @cmp_type
 

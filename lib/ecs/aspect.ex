@@ -1,4 +1,4 @@
-defmodule Aspect do
+defmodule Aspectfoo do
   @moduledoc """
     A module for dealing with component aspects. An aspect is used by an
     entity system to check if the system is interested in a
@@ -7,14 +7,29 @@ defmodule Aspect do
 
   use Bitwise
 
-  defstruct [all: 0, none: 0, one: 0]
+  defstruct all: 0, none: 0, one: 0
 
   @type t :: %__MODULE__{}
 
   @doc """
-    Returns an aspect where an entity must posses all of the specified components.
+    Shorthand for creating an `aspect`
 
-    ## Example
+    Examples:
+
+      # iex> Aspect.new()
+      # ...> Aspect.all(a, [C1, C2])
+      # %Aspect{all: 3, none: 0, one: 0}
+
+  """
+  def new(%{ all: all, none: none, one: one }) do
+    %__MODULE__{} |> Aspect.all(all) |> Aspect.none(none) |> Aspect.one(one)
+  end
+
+  @doc """
+    Returns an `aspect` where an entity must posses all of the specified components.
+
+    Examples:
+
       iex> a = %Aspect{}
       ...> Aspect.all(a, [C1, C2])
       %Aspect{all: 3, none: 0, one: 0}
@@ -22,13 +37,14 @@ defmodule Aspect do
   """
   @spec all(__MODULE__.t, list) :: __MODULE__.t
   def all(aspect, components \\ []) do
-    %{aspect | all: get_flags(aspect.all, components) }
+    %__MODULE__{aspect | all: get_flags(components) }
   end
 
   @doc """
-    Returns an aspect where an entity must posses none of the specified components.
+    Returns an `aspect` where an entity must posses none of the specified components.
 
-    ## Example
+    Examples:
+
       iex> a = %Aspect{}
       ...> Aspect.none(a, [C1, C2])
       %Aspect{all: 0, none: 3, one: 0}
@@ -36,13 +52,14 @@ defmodule Aspect do
   """
   @spec all(__MODULE__.t, list) :: __MODULE__.t
   def none(aspect, components \\ []) do
-    %{aspect | none: get_flags(aspect.none, components) }
+    %__MODULE__{aspect | none: get_flags(components) }
   end
 
   @doc """
-    Returns an aspect where an entity must posses one of the specified components.
+    Returns an `aspect` where an entity must posses one of the specified components.
 
-    ## Example
+    Examples:
+
       iex> a = %Aspect{}
       ...> Aspect.one(a, [C1, C2])
       %Aspect{all: 0, none: 0, one: 3}
@@ -50,12 +67,82 @@ defmodule Aspect do
   """
   @spec all(__MODULE__.t, list) :: __MODULE__.t
   def one(aspect, components \\ []) do
-    %{aspect | one: get_flags(aspect.one, components) }
+    %__MODULE__{aspect | one: get_flags(components) }
+  end
+
+  @doc """
+    Returns true if `entity` passes each `aspect` check (`all`, `none`, and `one`)
+
+    Examples:
+
+      iex> a = %Aspect{}
+      ...> a = a |> Aspect.all([C1]) |> Aspect.none([C2]) |> Aspect.one([C3])
+      ...> e = Entity.set(%Entity{}, [C1, C3])
+      ...> Aspect.check(a, e)
+      true
+
+  """
+  def check(aspect, entity) do
+    check_all(aspect, entity) and
+    check_none(aspect, entity)
+    # and
+    # check_one(aspect, entity)
+  end
+
+  @doc """
+    Returns true if `entity` contains all components in `aspect.all`,
+    otherwise it returns false
+
+    Examples:
+
+      iex> a = Aspect.all(%Aspect{}, [C1, C2])
+      ...> e = Entity.set(%Entity{}, [C1, C2])
+      ...> Aspect.check_all(a, e)
+      true
+
+  """
+  @spec check_all(__MODULE__.t, %Entity{}) :: boolean
+  def check_all(aspect, entity) do
+    (aspect.all ||| entity.components) == entity.components
+  end
+
+  @doc """
+    Returns true if `entity` contains none of components in `aspect.none`,
+    otherwise it returns false
+
+    Examples:
+
+      iex> a = Aspect.none(%Aspect{}, [C1, C2])
+      ...> e = Entity.set(%Entity{}, [C3])
+      ...> Aspect.check_none(a, e)
+      true
+
+  """
+  @spec check_none(__MODULE__.t, %Entity{}) :: boolean
+  def check_none(aspect, entity) do
+    (aspect.none &&& entity.components) == 0
+  end
+
+  @doc """
+    Returns true if `entity` contains one of the components in `aspect.one`,
+    otherwise it returns false
+
+    Examples:
+
+      iex> a = Aspect.one(%Aspect{}, [C1, C2])
+      ...> e = Entity.set(%Entity{}, [C1])
+      ...> Aspect.check_none(a, e)
+      true
+
+  """
+  @spec check_one(__MODULE__.t, %Entity{}) :: boolean
+  def check_one(aspect, entity) do
+
   end
 
   # accumulates flags
-  defp get_flags(flags, components) do
-    Enum.reduce(components, flags, &(&2 ^^^ &1.get_flag))
+  defp get_flags(components) do
+    Enum.reduce(components, 0, &(&2 ^^^ &1.get_flag))
   end
 
 end
