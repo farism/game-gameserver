@@ -1,5 +1,7 @@
 defmodule Store do
-
+  @moduledoc """
+  Provides a structured way to manage entity + component game state.
+  """
   use GenServer
 
   @initialState %{

@@ -1,20 +1,22 @@
 defmodule Aspect do
   @moduledoc """
-    A module for dealing with component aspects. An aspect is used by an
-    entity system to check if the system is interested in a
-    given entity, based on the components attached to that entity.
+  Provides methods for creating and manipulating aspects. An `aspect` is used
+  by an `EntitySystem` to check if the system is interested in a
+  given `entity`, based on the components attached to that entity.
   """
 
   use Bitwise
 
   defstruct all: 0, none: 0, one: 0
 
-  @type t :: %__MODULE__{}
+  @type t :: %__MODULE__{all: integer, none: integer, one: integer}
+
+  @type component_list :: [atom]
 
   @doc """
-    Shorthand for creating an `aspect`
+  Shorthand for creating an `aspect`
 
-    Examples:
+    ## Examples
 
       # iex> Aspect.new()
       # ...> Aspect.all(a, [C1, C2])
@@ -29,54 +31,54 @@ defmodule Aspect do
   end
 
   @doc """
-    Returns an `aspect` where an entity must posses all of the specified components.
+  Returns an `aspect` where an entity must posses all of the specified components.
 
-    Examples:
+    ## Examples
 
       iex> a = %Aspect{}
       ...> Aspect.all(a, [C1, C2])
       %Aspect{all: 3, none: 0, one: 0}
 
   """
-  @spec all(__MODULE__.t, list) :: __MODULE__.t
+  @spec all(__MODULE__.t, component_list) :: __MODULE__.t
   def all(aspect, components \\ []) do
     %__MODULE__{aspect | all: get_flags(components) }
   end
 
   @doc """
-    Returns an `aspect` where an entity must posses none of the specified components.
+  Returns an `aspect` where an entity must posses none of the specified components.
 
-    Examples:
+    ## Examples
 
       iex> a = %Aspect{}
       ...> Aspect.none(a, [C1, C2])
       %Aspect{all: 0, none: 3, one: 0}
 
   """
-  @spec all(__MODULE__.t, list) :: __MODULE__.t
+  @spec none(__MODULE__.t, component_list) :: __MODULE__.t
   def none(aspect, components \\ []) do
     %__MODULE__{aspect | none: get_flags(components) }
   end
 
   @doc """
-    Returns an `aspect` where an entity must posses one of the specified components.
+  Returns an `aspect` where an entity must posses one of the specified components.
 
-    Examples:
+    ## Examples
 
       iex> a = %Aspect{}
       ...> Aspect.one(a, [C1, C2])
       %Aspect{all: 0, none: 0, one: 3}
 
   """
-  @spec all(__MODULE__.t, list) :: __MODULE__.t
+  @spec one(__MODULE__.t, component_list) :: __MODULE__.t
   def one(aspect, components \\ []) do
     %__MODULE__{aspect | one: get_flags(components) }
   end
 
   @doc """
-    Returns true if `entity` passes each `aspect` check (`all`, `none`, and `one`)
+  Returns true if `entity` passes each `aspect` check (`all`, `none`, and `one`)
 
-    Examples:
+    ## Examples
 
       iex> a = %Aspect{}
       ...> a = a |> Aspect.all([C1]) |> Aspect.none([C2]) |> Aspect.one([C3])
@@ -85,6 +87,7 @@ defmodule Aspect do
       true
 
   """
+  @spec check(__MODULE__.t, Entity.t) :: boolean
   def check(aspect, entity) do
     check_all(aspect, entity) and
     check_none(aspect, entity)
@@ -93,10 +96,10 @@ defmodule Aspect do
   end
 
   @doc """
-    Returns true if `entity` contains all components in `aspect.all`,
-    otherwise it returns false
+  Returns true if `entity` contains all components in `aspect.all`,
+  otherwise it returns false
 
-    Examples:
+    ## Examples
 
       iex> a = Aspect.all(%Aspect{}, [C1, C2])
       ...> e = Entity.new([components: [C1, C2]])
@@ -104,16 +107,16 @@ defmodule Aspect do
       true
 
   """
-  @spec check_all(__MODULE__.t, %Entity{}) :: boolean
+  @spec check_all(__MODULE__.t, Entity.t) :: boolean
   def check_all(aspect, entity) do
     (aspect.all ||| entity.components) == entity.components
   end
 
   @doc """
-    Returns true if `entity` contains none of components in `aspect.none`,
-    otherwise it returns false
+  Returns true if `entity` contains none of components in `aspect.none`,
+  otherwise it returns false
 
-    Examples:
+    ## Examples
 
       iex> a = Aspect.none(%Aspect{}, [C1, C2])
       ...> e = Entity.new([components: [C3]])
@@ -121,16 +124,16 @@ defmodule Aspect do
       true
 
   """
-  @spec check_none(__MODULE__.t, %Entity{}) :: boolean
+  @spec check_none(__MODULE__.t, Entity.t) :: boolean
   def check_none(aspect, entity) do
     (aspect.none &&& entity.components) == 0
   end
 
   @doc """
-    Returns true if `entity` contains one of the components in `aspect.one`,
-    otherwise it returns false
+  Returns true if `entity` contains one of the components in `aspect.one`,
+  otherwise it returns false
 
-    Examples:
+    ## Examples
 
       iex> a = Aspect.one(%Aspect{}, [C1, C2])
       ...> e = Entity.new([components: [C1, C3]])
@@ -138,12 +141,13 @@ defmodule Aspect do
       true
 
   """
-  @spec check_one(__MODULE__.t, %Entity{}) :: boolean
+  @spec check_one(__MODULE__.t, Entity.t) :: boolean
   def check_one(aspect, entity) do
     (aspect.one &&& entity.components) != 0
   end
 
   # accumulates flags
+  @spec get_flags(component_list) :: integer
   defp get_flags(components) do
     Enum.reduce(components, 0, &(&2 ^^^ &1.get_flag))
   end

@@ -13,8 +13,8 @@ defmodule Gameserver do
     Supervisor.start_link(children, opts)
   end
 
-  def loop do
-    loop
+  def loop(systems) do
+    loop(systems)
   end
 
 end
