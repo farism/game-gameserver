@@ -6,11 +6,13 @@ defmodule Gameserver do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Store, [Store])
+      worker(ECS, [ECS])
     ]
 
     opts = [strategy: :one_for_one, name: Gameserver.Supervisor]
     Supervisor.start_link(children, opts)
+
+
   end
 
   def loop(systems) do

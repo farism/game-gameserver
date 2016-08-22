@@ -149,7 +149,7 @@ defmodule Aspect do
   # accumulates flags
   @spec get_flags(component_list) :: integer
   defp get_flags(components) do
-    Enum.reduce(components, 0, &(&2 ^^^ &1.get_flag))
+    Enum.reduce(components, 0, fn(module, cur) -> cur ^^^ apply(module, :get_flag, []) end)
   end
 
 end

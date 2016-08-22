@@ -3,60 +3,84 @@ defmodule ECS do
   Provides methods for orchestrating the ECS. Call tick from your main game loop.
   """
 
-  def tick(pid, systems) do
+  use GenServer
+
+  @initialState %{
+    entities: %{},
+    components: %{},
+    systems: %{},
+  }
+
+  # client
+
+  def start_link(name) do
+    GenServer.start_link(__MODULE__, @initialState, name: name)
+  end
+
+  def tick(systems) do
     Enum.each(systems, fn(system) ->
-      apply(system, :process, [pid])
+      apply(system, :process, [])
     end)
 
-    tick(pid, systems)
+    tick(systems)
   end
 
-  def add_entity(pid, entity) do
-
-  end
-
-  def remove_entity(pid, entity) do
+  def add_entity(entity) do
 
   end
 
-  def freeze_entity(pid, entity) do
+  def remove_entity(entity) do
 
   end
 
-  def thaw_entity(pid, entity) do
+  def freeze_entity(entity) do
 
   end
 
-  def add_component(pid, entity, component) do
+  def thaw_entity(entity) do
 
   end
 
-  def remove_component(pid, entity, component) do
+  def add_component(entity, component) do
 
   end
 
-  def freeze_component(pid, entity, component) do
+  def remove_component(entity, component) do
 
   end
 
-  def thaw_component(pid, entity) do
+  def freeze_component(entity, component) do
 
   end
 
-  def add_system(pid, system) do
+  def thaw_component(entity) do
 
   end
 
-  def remove_system(pid, system) do
+  def add_system(system) do
 
   end
 
-  def freeze_system(pid, system) do
+  def remove_system(system) do
 
   end
 
-  def thaw_system(pid, system) do
+  def freeze_system(system) do
 
+  end
+
+  def thaw_system(system) do
+
+  end
+
+  # server
+
+  def handle_call(request, from, state) do
+    super(request, from, state)
+  end
+
+  def handle_cast(request, state) do
+    super(request, state)
   end
 
 end

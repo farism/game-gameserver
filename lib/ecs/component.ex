@@ -1,10 +1,28 @@
 defmodule Component do
   @moduledoc """
-  Base module for implementing component behaviour
+  Macros for creating component types
   """
 
-  @callback get_type :: atom
+  @doc false
+  defmacro __using__(_) do
+    quote do
+      import Component, only: [component: 3]
+    end
+  end
 
-  @callback get_flag :: Integer
+  @spec component(atom, integer, [key: any]) :: module
+  defmacro component(type, flag, properties) do
+
+    use Bitwise
+
+    quote do
+      defstruct unquote(properties)
+
+      def get_type, do: unquote(type)
+
+      def get_flag, do: unquote(1 <<< flag)
+    end
+
+  end
 
 end
