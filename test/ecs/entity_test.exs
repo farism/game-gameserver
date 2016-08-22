@@ -1,10 +1,11 @@
 defmodule EntityTest do
 
-  use ExUnit.Case, async: true
+  alias ECS.Entity, as: Entity
+  alias TestModules.Components.C1, as: C1
+  alias TestModules.Components.C2, as: C2
+  alias TestModules.Systems.S1, as: S1
 
-  alias TestComponents.C1, as: C1
-  alias TestComponents.C2, as: C2
-  alias TestSystems.S1, as: S1
+  use ExUnit.Case, async: true
 
   doctest Entity
 

@@ -1,6 +1,6 @@
-defmodule Movement do
+defmodule Game.System.Movement do
 
-  use EntitySystem
+  use ECS.EntitySystem
 
   system(:movement, 1, [all: [Position, Velocity]])
 

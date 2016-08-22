@@ -1,4 +1,4 @@
-defmodule Aspect do
+defmodule ECS.Aspect do
   @moduledoc """
   Provides methods for creating and manipulating aspects. An `aspect` is used
   by an `EntitySystem` to check if the system is interested in a
@@ -25,9 +25,9 @@ defmodule Aspect do
   """
   def new(options \\ []) do
     %__MODULE__{}
-      |> Aspect.all(Keyword.get(options, :all, []))
-      |> Aspect.none(Keyword.get(options, :none, []))
-      |> Aspect.one(Keyword.get(options, :one, []))
+      |> __MODULE__.all(Keyword.get(options, :all, []))
+      |> __MODULE__.none(Keyword.get(options, :none, []))
+      |> __MODULE__.one(Keyword.get(options, :one, []))
   end
 
   @doc """

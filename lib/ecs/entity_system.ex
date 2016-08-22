@@ -1,22 +1,18 @@
-defmodule EntitySystem do
+defmodule ECS.EntitySystem do
+
+  @type entity_list :: [Entity.t]
+
+  @callback process(entity_list) :: any
 
   @doc false
   defmacro __using__(_) do
 
     quote do
-      import EntitySystem, only: [system: 3]
+      import ECS.EntitySystem, only: [system: 3]
 
-      @type entity_list :: [Entity.t]
+      @behaviour ECS.EntitySystem
 
-      @callback process(list) :: any
-
-      @doc false
-      @spec process(entity_list) :: any
-      def process(entities) do
-
-      end
-
-      defoverridable [process: 1]
+      @type entity_list :: ECS.EntitySystem.entity_list
 
     end
 
@@ -32,7 +28,7 @@ defmodule EntitySystem do
 
       def get_flag, do: unquote(1 <<< flag)
 
-      def get_aspect, do: Aspect.new(unquote(aspect))
+      def get_aspect, do: ECS.Aspect.new(unquote(aspect))
 
     end
 

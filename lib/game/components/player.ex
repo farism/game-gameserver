@@ -1,6 +1,6 @@
-defmodule Player do
+defmodule Game.Component.Player do
 
-  use Component
+  use ECS.Component
 
   component(:player, 0, [name: ""])
 

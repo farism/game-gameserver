@@ -1,4 +1,4 @@
-defmodule Entity do
+defmodule ECS.Entity do
 
   use Bitwise
 
