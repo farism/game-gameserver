@@ -1,4 +1,4 @@
-defmodule Aspectfoo do
+defmodule Aspect do
   @moduledoc """
     A module for dealing with component aspects. An aspect is used by an
     entity system to check if the system is interested in a
@@ -21,8 +21,11 @@ defmodule Aspectfoo do
       # %Aspect{all: 3, none: 0, one: 0}
 
   """
-  def new(%{ all: all, none: none, one: one }) do
-    %__MODULE__{} |> Aspect.all(all) |> Aspect.none(none) |> Aspect.one(one)
+  def new(options \\ []) do
+    %__MODULE__{}
+      |> Aspect.all(Keyword.get(options, :all, []))
+      |> Aspect.none(Keyword.get(options, :none, []))
+      |> Aspect.one(Keyword.get(options, :one, []))
   end
 
   @doc """
@@ -77,7 +80,7 @@ defmodule Aspectfoo do
 
       iex> a = %Aspect{}
       ...> a = a |> Aspect.all([C1]) |> Aspect.none([C2]) |> Aspect.one([C3])
-      ...> e = Entity.set(%Entity{}, [C1, C3])
+      ...> e = Entity.new([components: [C1, C3]])
       ...> Aspect.check(a, e)
       true
 
@@ -96,7 +99,7 @@ defmodule Aspectfoo do
     Examples:
 
       iex> a = Aspect.all(%Aspect{}, [C1, C2])
-      ...> e = Entity.set(%Entity{}, [C1, C2])
+      ...> e = Entity.new([components: [C1, C2]])
       ...> Aspect.check_all(a, e)
       true
 
@@ -113,7 +116,7 @@ defmodule Aspectfoo do
     Examples:
 
       iex> a = Aspect.none(%Aspect{}, [C1, C2])
-      ...> e = Entity.set(%Entity{}, [C3])
+      ...> e = Entity.new([components: [C3]])
       ...> Aspect.check_none(a, e)
       true
 
@@ -130,14 +133,14 @@ defmodule Aspectfoo do
     Examples:
 
       iex> a = Aspect.one(%Aspect{}, [C1, C2])
-      ...> e = Entity.set(%Entity{}, [C1])
-      ...> Aspect.check_none(a, e)
+      ...> e = Entity.new([components: [C1, C3]])
+      ...> Aspect.check_one(a, e)
       true
 
   """
   @spec check_one(__MODULE__.t, %Entity{}) :: boolean
   def check_one(aspect, entity) do
-
+    (aspect.one &&& entity.components) != 0
   end
 
   # accumulates flags

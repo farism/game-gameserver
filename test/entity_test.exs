@@ -1,28 +1,35 @@
 defmodule EntityTest do
 
   use ExUnit.Case, async: true
-  use Bitwise
 
-  defmodule C1 do
-    @behaviour EntityComponent
-    def get_type, do: :c1
-    def get_flag, do: 1 <<< 0
-  end
-
-  defmodule C2 do
-    @behaviour EntityComponent
-    def get_type, do: :c2
-    def get_flag, do: 1 <<< 1
-  end
+  alias TestComponents.C1, as: C1
+  alias TestComponents.C2, as: C2
+  alias TestSystems.S1, as: S1
 
   doctest Entity
 
-  test "sets multiple component flags" do
-    assert Entity.set(%Entity{}, [C1, C2]) == %Entity{components: 3}
+  test "`new` returns an empty entity when no options are supplied" do
+    assert Entity.new() == %Entity{}
   end
 
-  test "unsets multiple component flags" do
-    assert Entity.unset(%Entity{components: 3}, [C1, C2]) == %Entity{components: 0}
+  test "`new` returns an entity with the specified components and systems toggled on" do
+    assert Entity.new([components: [C1], systems: [S1]]) == %Entity{components: 1, systems: 1}
+  end
+
+  test "`new` returns an entity with the specified components toggled on" do
+    assert Entity.new([components: [C1, C2]]) == %Entity{components: 3}
+  end
+
+  test "`new` returns an entity with the specified systems toggled on" do
+    assert Entity.new([systems: [S1]]) == %Entity{systems: 1}
+  end
+
+  test "`set` returns a new entity with the specified components toggled on" do
+    assert Entity.set(%Entity{}, {:component, [C1, C2]}) == %Entity{components: 3}
+  end
+
+  test "`unset` returns a new entity with the specified components toggled off" do
+    assert Entity.unset(%Entity{components: 3}, {:component, [C1, C2]}) == %Entity{components: 0}
   end
 
 end
