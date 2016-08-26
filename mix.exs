@@ -29,6 +29,7 @@ defmodule Gameserver.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:ex_doc, "~> 0.12", only: :dev},
-     {:dialyxir, "~> 0.3.5", only: [:dev]}]
+     {:dialyxir, "~> 0.3.5", only: [:dev]},
+     {:amnesia, "~> 0.2.4"}]
   end
 end

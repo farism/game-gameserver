@@ -36,7 +36,7 @@ defmodule ECS.Aspect do
     ## Examples
 
       iex> a = %Aspect{}
-      ...> Aspect.all(a, [C1, C2])
+      ...> Aspect.all(a, [C1])
       %Aspect{all: 3, none: 0, one: 0}
 
   """
@@ -149,7 +149,7 @@ defmodule ECS.Aspect do
   # accumulates flags
   @spec get_flags(component_list) :: integer
   defp get_flags(components) do
-    Enum.reduce(components, 0, fn(module, cur) -> cur ^^^ apply(module, :get_flag, []) end)
+    Enum.reduce(components, 0, &(&2 ^^^ apply(&1, :get_flag, [])))
   end
 
 end
