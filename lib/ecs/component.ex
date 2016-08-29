@@ -11,6 +11,7 @@ defmodule ECS.Component do
   defmacro __using__(_) do
     quote do
       import ECS.Component, only: [component: 2, defcomponent: 3, defcomponent: 4]
+      use Amnesia
     end
   end
 
@@ -24,8 +25,16 @@ defmodule ECS.Component do
           1 <<< unquote(1)
         end
 
+        def get(entity) do
+        end
+
+        def get!(entity) do
+        end
+
         def entity(self) do
-          unquote(__CALLER__.module).Entity.read(self.entity_id)
+          Amnesia.transaction do
+            unquote(__CALLER__.module).Entity.read(self.entity_id)
+          end
         end
 
         def entity!(self) do

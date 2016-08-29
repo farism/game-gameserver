@@ -49,15 +49,26 @@ defmodule StoreTest do
     end |> Map.has_key?(:entity_id))
   end
 
-  test "injects `get_flag` function" do
+  test "injects `get_flag` helper" do
     assert(C1.__info__(:functions) |> Keyword.get(:get_flag) == 0)
   end
 
-  test "injects `entity` function" do
-    assert(Amnesia.transaction! do
+  test "injects `entity` helper" do
+    c1 = Amnesia.transaction! do
       e = %Entity{} |> Entity.write
-      %C1{entity_id: e.id} |> C1.write |> C1.entity
-    end == %Entity{id: 1})
+      %C1{entity_id: e.id} |> C1.write
+    end
+
+    assert (c1 |> C1.entity) == %Entity{id: 1}
+  end
+
+  test "injects `entity!` helper" do
+    c1 = Amnesia.transaction! do
+      e = %Entity{} |> Entity.write
+      %C1{entity_id: e.id} |> C1.write
+    end
+
+    assert (c1 |> C1.entity!) == %Entity{id: 1}
   end
 
 end
