@@ -36,7 +36,7 @@ defmodule ECS.Aspect do
     ## Examples
 
       iex> a = %Aspect{}
-      ...> Aspect.all(a, [C1])
+      ...> Aspect.all(a, [C1, C2])
       %Aspect{all: 3, none: 0, one: 0}
 
   """

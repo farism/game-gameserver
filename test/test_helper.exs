@@ -8,17 +8,17 @@ defmodule TestModules do
 
     defmodule C1 do
       use Component
-      component(:c1, 0, [])
+      component(0, [a: 0, b: 0, c: 0])
     end
 
     defmodule C2 do
       use Component
-      component(:c1, 1, [])
+      component(1, [x: 0, y: 0, z: 0])
     end
 
     defmodule C3 do
       use Component
-      component(:c1, 2, [])
+      component(2, [foo: "bar"])
     end
   end
 
@@ -33,6 +33,22 @@ defmodule TestModules do
 
   end
 
+end
+
+defmodule Amnesia.Test do
+  def start do
+    Logger.remove_backend :console
+    Amnesia.Schema.create
+    Amnesia.start
+    :ok
+  end
+
+  def stop do
+    Amnesia.stop
+    Amnesia.Schema.destroy
+    Logger.add_backend :console, flush: true
+    :ok
+  end
 end
 
 ExUnit.start()

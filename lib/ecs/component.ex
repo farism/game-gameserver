@@ -1,67 +1,51 @@
+use Amnesia
+
 defmodule ECS.Component do
   @moduledoc """
-  Macros for creating component types
+  Macros for creating components
   """
 
-  @callback get_type :: atom
-
-  @callback get_integer :: atom
-
-  def to_type(value) do
-    cond do
-      is_atom(value) -> "atom"
-      is_binary(value) -> "binary"
-      is_bitstring(value) -> "bitstring"
-      is_boolean(value) -> "boolean"
-      is_float(value) -> "float"
-      is_integer(value) -> "integer"
-      is_list(value) -> "list"
-      is_map(value) -> "map"
-      is_nil(value) -> "nil"
-      is_number(value) -> "number"
-      is_pid(value) -> "pid"
-      is_port(value) -> "port"
-      is_reference(value) -> "reference"
-      is_tuple(value) -> "tuple"
-      true -> "unknown type"
-    end
-  end
+  use Bitwise
 
   @doc false
   defmacro __using__(_) do
     quote do
-      import ECS.Component, only: [component: 3]
+      import ECS.Component, only: [component: 2, defcomponent: 3, defcomponent: 4]
     end
   end
 
-  @spec component(atom, integer, [key: any]) :: module
-  defmacro component(type, flag, properties \\ []) do
+  defmacro defcomponent(name, flag, attributes \\ nil, do_block \\ []) do
+    ai = quote(do: [{:id, autoincrement}, :entity_id])
+    quote do
+      deftable unquote(name), unquote(ai ++ attributes), type: :ordered_set do
+        unquote(do_block)
 
-    use Bitwise
+        def get_flag, do: 1 <<< unquote(1)
+      end
+    end
+  end
+
+  @spec component(integer, [key: any]) :: module
+  defmacro component(flag, attributes \\ []) do
 
     quote do
       @doc """
-      The `#{to_string(__MODULE__) |> String.split(".") |> List.last}` struct.
-
-      It contains these fields:
-
-        #{Enum.map(unquote(properties), fn({key, default}) ->
-          "* `:#{to_string(key)}` - #{ECS.Component.to_type(default)}" <> "\r\n"
-        end)}
+      Returns this module's name, split from the fully qualified name
       """
-      defstruct unquote(properties)
-
-      @doc """
-      Returns this module's `type` as an atom
-      """
-      @spec get_type :: unquote(type)
-      def get_type, do: unquote(type)
+      @spec get_name :: String.t
+      def get_name, do: unquote(Module.split(__CALLER__.module) |> List.last)
 
       @doc """
       Returns this module's bitmask `flag` as an integer
       """
       @spec get_flag :: unquote(1 <<< flag)
       def get_flag, do: unquote(1 <<< flag)
+
+      @doc """
+      Returns this module's properties as a keyword list
+      """
+      @spec get_properties :: []
+      def get_properties, do: unquote(attributes)
     end
 
   end
