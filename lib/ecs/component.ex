@@ -20,7 +20,17 @@ defmodule ECS.Component do
       deftable unquote(name), unquote(ai ++ attributes), type: :ordered_set do
         unquote(do_block)
 
-        def get_flag, do: 1 <<< unquote(1)
+        def get_flag do
+          1 <<< unquote(1)
+        end
+
+        def entity(self) do
+          unquote(__CALLER__.module).Entity.read(self.entity_id)
+        end
+
+        def entity!(self) do
+          unquote(__CALLER__.module).Entity.read!(self.entity_id)
+        end
       end
     end
   end
