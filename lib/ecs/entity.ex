@@ -13,7 +13,8 @@ defmodule ECS.Entity do
   @doc """
   Returns an entity with the specified component flags set
 
-    ## Example
+  ## Examples
+
       iex> Entity.new([components: [C1, C2]])
       %Entity{components: 3}
 
@@ -28,7 +29,8 @@ defmodule ECS.Entity do
   @doc """
   Returns an entity with the specified type flags set
 
-    ## Example
+  ## Examples
+
       iex> Entity.set(%Entity{}, {:component, [C1]})
       %Entity{components: 1}
 
@@ -46,7 +48,8 @@ defmodule ECS.Entity do
   @doc """
   Returns an entity with the specified type flags unset
 
-    ## Example
+  ## Examples
+
       iex> Entity.set(%Entity{systems: 1}, {:system, [S1]})
       %Entity{systems: 0}
 

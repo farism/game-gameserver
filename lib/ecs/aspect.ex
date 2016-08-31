@@ -16,11 +16,10 @@ defmodule ECS.Aspect do
   @doc """
   Shorthand for creating an `aspect`
 
-    ## Examples
+  ## Examples
 
-      # iex> Aspect.new()
-      # ...> Aspect.all(a, [C1, C2])
-      # %Aspect{all: 3, none: 0, one: 0}
+      iex> a = Aspect.new(all: [C1], none: [C2], one: [C3])
+      %Aspect{all: 1, none: 2, one: 4}
 
   """
   def new(options \\ []) do
@@ -33,7 +32,7 @@ defmodule ECS.Aspect do
   @doc """
   Returns an `aspect` where an entity must posses all of the specified components.
 
-    ## Examples
+  ## Examples
 
       iex> a = %Aspect{}
       ...> Aspect.all(a, [C1, C2])
@@ -48,7 +47,7 @@ defmodule ECS.Aspect do
   @doc """
   Returns an `aspect` where an entity must posses none of the specified components.
 
-    ## Examples
+  ## Examples
 
       iex> a = %Aspect{}
       ...> Aspect.none(a, [C1, C2])
@@ -63,7 +62,7 @@ defmodule ECS.Aspect do
   @doc """
   Returns an `aspect` where an entity must posses one of the specified components.
 
-    ## Examples
+  ## Examples
 
       iex> a = %Aspect{}
       ...> Aspect.one(a, [C1, C2])
@@ -78,7 +77,7 @@ defmodule ECS.Aspect do
   @doc """
   Returns true if `entity` passes each `aspect` check (`all`, `none`, and `one`)
 
-    ## Examples
+  ## Examples
 
       iex> a = %Aspect{}
       ...> a = a |> Aspect.all([C1]) |> Aspect.none([C2]) |> Aspect.one([C3])
@@ -99,7 +98,7 @@ defmodule ECS.Aspect do
   Returns true if `entity` contains all components in `aspect.all`,
   otherwise it returns false
 
-    ## Examples
+  ##Examples
 
       iex> a = Aspect.all(%Aspect{}, [C1, C2])
       ...> e = Entity.new([components: [C1, C2]])
@@ -116,7 +115,7 @@ defmodule ECS.Aspect do
   Returns true if `entity` contains none of components in `aspect.none`,
   otherwise it returns false
 
-    ## Examples
+  ## Examples
 
       iex> a = Aspect.none(%Aspect{}, [C1, C2])
       ...> e = Entity.new([components: [C3]])
@@ -133,7 +132,7 @@ defmodule ECS.Aspect do
   Returns true if `entity` contains one of the components in `aspect.one`,
   otherwise it returns false
 
-    ## Examples
+  ## Examples
 
       iex> a = Aspect.one(%Aspect{}, [C1, C2])
       ...> e = Entity.new([components: [C1, C3]])
