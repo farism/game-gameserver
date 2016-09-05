@@ -1,12 +1,13 @@
 defmodule AspectTest do
 
   use ExUnit.Case, async: true
+  use TestModules.Store
 
   alias ECS.Aspect, as: Aspect
   alias ECS.Entity, as: Entity
-  alias TestModules.Components.C1, as: C1
-  alias TestModules.Components.C2, as: C2
-  alias TestModules.Components.C3, as: C3
+  # alias TestModules.Store.C1, as: C1
+  # alias TestModules.Store.C2, as: C2
+  # alias TestModules.Store.C3, as: C3
 
   doctest Aspect
 

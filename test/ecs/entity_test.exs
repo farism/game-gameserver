@@ -1,8 +1,8 @@
 defmodule EntityTest do
 
   alias ECS.Entity, as: Entity
-  alias TestModules.Components.C1, as: C1
-  alias TestModules.Components.C2, as: C2
+  alias TestModules.Store.C1, as: C1
+  alias TestModules.Store.C2, as: C2
   alias TestModules.Systems.S1, as: S1
 
   use ExUnit.Case, async: true
