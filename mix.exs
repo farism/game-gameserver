@@ -14,7 +14,7 @@ defmodule Gameserver.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger],
+    [applications: [:logger, :ranch],
      mod: {Gameserver, []}]
   end
 
@@ -30,6 +30,9 @@ defmodule Gameserver.Mixfile do
   defp deps do
     [{:ex_doc, "~> 0.12", only: :dev},
      {:dialyxir, "~> 0.3.5", only: [:dev]},
-     {:amnesia, "~> 0.2.4"}]
+     {:amnesia, "~> 0.2.4"},
+     {:ranch, "~> 1.2.1"},
+     {:math, "~> 0.2.0"},
+     {:graphmath, "~> 1.0"}]
   end
 end
