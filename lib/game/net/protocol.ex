@@ -14,6 +14,8 @@ defmodule Net.Protocol do
   def loop(socket, transport) do
     case transport.recv(socket, 0, 600000) do
       {:ok, data} ->
+        # <<first :: bitstring-size(8), _ :: binary>> = data
+        IO.puts "client #{inspect(socket)} sent #{byte_size(data)} bytes: #{inspect(data)}"
         transport.send(socket, data)
         loop(socket, transport)
       {_, :closed} ->
